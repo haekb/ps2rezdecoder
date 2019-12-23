@@ -52,6 +52,6 @@ protected:
 	Header m_Header;
 	std::vector<BlockData> m_Blocks;
 
-	std::ifstream m_pStream;
+	std::ifstream m_Stream;
 };
 

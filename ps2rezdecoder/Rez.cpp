@@ -14,29 +14,29 @@ Rez::~Rez()
 
 bool Rez::Open(std::string file)
 {
-	m_pStream.open(file, std::ios_base::binary);
+	m_Stream.open(file, std::ios_base::binary);
 
-	if (!m_pStream.is_open()) {
+	if (!m_Stream.is_open()) {
 		return false;
 	}
 
 	// Read in the data
-	m_pStream.read((char*)&m_Header, sizeof(m_Header));
+	m_Stream.read((char*)&m_Header, sizeof(m_Header));
 
 	// Magic number, sorry!
-	m_pStream.seekg(1312);
+	m_Stream.seekg(1312);
 
 	// Read in the blocks
 	for (int i = 0; i < m_Header.iTotalBlocks; i++) {
 		BlockData block;
 
-		m_pStream.read((char*)&block.padding, sizeof(block.padding));
+		m_Stream.read((char*)&block.padding, sizeof(block.padding));
 
 		// Read in the files
 		for (int j = 0; j < m_Header.iTotalFiles; j++) {
 			FileData file;
 
-			m_pStream.read((char*)&file, sizeof(file));
+			m_Stream.read((char*)&file, sizeof(file));
 
 			block.Files.push_back(file);
 		}
@@ -49,7 +49,7 @@ bool Rez::Open(std::string file)
 
 bool Rez::Close()
 {
-	m_pStream.close();
+	m_Stream.close();
 
 	return true;
 }
@@ -91,8 +91,14 @@ bool Rez::Extract(std::string filename, uint hash, int blockNumber)
 			return false;
 		}
 
-		m_pStream.seekg(seek);
+		m_Stream.seekg(seek);
 
+		
+#if 0
+		char* buffer = new char[togo];
+		m_Stream.read(buffer, togo);
+		fileOut.write(buffer, togo);
+#else
 		// Extract 2048 by 2048
 		while (togo > 0) {
 			if (togo < inc) {
@@ -101,14 +107,15 @@ bool Rez::Extract(std::string filename, uint hash, int blockNumber)
 
 			char* buffer = new char[inc];
 
-			m_pStream.read(buffer, inc);
-			currentPos += m_pStream.gcount();
+			m_Stream.read(buffer, inc);
+			currentPos += m_Stream.gcount();
 
 			fileOut.write(buffer, inc);
 
 
 			togo -= inc;
 		}
+#endif
 		
 		fileOut.close();
 		return true;
