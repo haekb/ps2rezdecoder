@@ -1,0 +1,38 @@
+//------------------------------------------------
+//--- 010 Editor v10.0 Binary Template
+//
+//      File: PS2 Rez 
+//   Authors: HeyJake
+//   Version: 1.0
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    uint firstDummy;
+    uint totalFiles;
+    uint secondDummy;
+    uint dataOffset;
+    uint totalBlocks;
+} RezHeader;
+
+typedef struct {
+    uint nameCRC;
+    uint offset;
+    uint size;
+    uint xSize;
+} FileData;
+
+typedef struct (int length) {
+    char padding[736];
+    FileData fileData[length];// <optimize=false>;
+} BlockData;
+
+RezHeader hdr;
+
+FSeek(1312);
+
+BlockData blockData(hdr.totalFiles)[hdr.totalBlocks];// <optimize=false>;
