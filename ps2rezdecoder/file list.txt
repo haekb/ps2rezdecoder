@@ -4836,3 +4836,9 @@ Attributes\AnimationsHuman.but
 attributes\levels.txt
 attributes\levels.but
 attributes\butemaker.exe
+config\autoexec.ps2
+credits\intro.txt
+credits\credits.txt
+credits\demoinfo.txt
+credits\demointro.txt
+credits\demomulti.txt
